@@ -1,0 +1,12 @@
+[prune]
+  go-tests = true
+  unused-packages = true
+
+
+[[constraint]]
+  name = "github.com/go-telegram-bot-api/telegram-bot-api"
+  version = "v4.6.2"
+
+[[constraint]]
+  name = "github.com/BurntSushi/toml"
+  version = "v0.3.0"
