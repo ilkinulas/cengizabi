@@ -1,1 +1,4 @@
 BotApiToken = ""
+
+[Podcast]
+BaseUrl=""

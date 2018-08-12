@@ -33,7 +33,7 @@ func main() {
 
 	log.Printf("Telegram bot %s is ready. Listening for updates...", bot.Self.UserName)
 
-	cmdRegistry := command.NewRegistry()
+	cmdRegistry := command.NewRegistry(*cfg, logger)
 
 	for update := range updates {
 		msg, err := handleUpdate(update, cmdRegistry, logger)
@@ -52,11 +52,10 @@ func handleUpdate(update tgbotapi.Update, cmdRegistry *command.Registry, logger 
 	text := update.Message.Text
 	cmdOut, err := cmdRegistry.HandleMessage(text)
 	if err != nil {
-		return nil, fmt.Errorf("command exec failed. %v", err)
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, err.Error())
+		return &msg, nil
 	}
 	msg := tgbotapi.NewMessage(update.Message.Chat.ID, cmdOut.Text)
-	//msg.ReplyToMessageID = update.Message.MessageID
-	logger.Printf("Replying with %v", cmdOut.Text)
 	return &msg, nil
 }
 

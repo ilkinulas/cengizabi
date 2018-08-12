@@ -3,6 +3,8 @@ package command
 import (
 	"fmt"
 	"strings"
+	"github.com/ilkinulas/cengizabi/config"
+	"log"
 )
 
 type Command interface {
@@ -20,17 +22,22 @@ type Input struct {
 
 type Registry struct {
 	commands map[string]Command
+	cfg      config.Config
+	logger   *log.Logger
 }
 
 func (r *Registry) addCommand(key string, command Command) {
 	r.commands[key] = command
 }
 
-func NewRegistry() *Registry {
+func NewRegistry(cfg config.Config, logger *log.Logger) *Registry {
 	registry := Registry{
+		cfg:      cfg,
 		commands: make(map[string]Command),
+		logger:   logger,
 	}
-	registry.addCommand("/echo", &EchoCommand{})
+	registry.addCommand("/echo", &Echo{})
+	registry.addCommand("/podcast", NewPodcast(cfg.Podcast, logger))
 	return &registry
 }
 
